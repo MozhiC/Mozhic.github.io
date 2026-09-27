@@ -291,6 +291,10 @@
       margin: 16px 0 4px;
     }
 
+    .contact-list[hidden] {
+      display: none !important;
+    }
+
     .contact-item {
       display: grid;
       grid-template-columns: 84px minmax(0, 1fr);
@@ -322,6 +326,53 @@
 
     .contact-value:hover {
       color: var(--accent);
+    }
+
+    .cv-list {
+      display: grid;
+      gap: 0;
+      margin: 12px 0 6px;
+    }
+
+    .cv-list[hidden] {
+      display: none !important;
+    }
+
+    .cv-item {
+      display: grid;
+      grid-template-columns: 74px minmax(0, 1fr);
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(148,165,185,.30);
+    }
+
+    .cv-item:last-child {
+      border-bottom: 0;
+    }
+
+    .cv-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      padding-top: 2px;
+    }
+
+    .cv-main {
+      color: var(--text);
+      font-size: 13.5px;
+      line-height: 1.5;
+      font-weight: 800;
+    }
+
+    .cv-sub {
+      display: block;
+      margin-top: 2px;
+      color: #59677a;
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 600;
     }
 
     .chip {
@@ -554,6 +605,38 @@
             <a class="contact-value" href="tel:+8618096637960">+86 180 9663 7960</a>
           </div>
         </div>
+
+        <div class="cv-list" id="cvList" hidden>
+          <div class="cv-item">
+            <div class="cv-label">Current</div>
+            <div class="cv-main">
+              Ph.D. Candidate · Electrical Engineering
+              <span class="cv-sub">Villanova University · Advisor: Dr. Liang Du</span>
+            </div>
+          </div>
+          <div class="cv-item">
+            <div class="cv-label">M.S.</div>
+            <div class="cv-main">
+              Electrical &amp; Computer Engineering
+              <span class="cv-sub">University of Florida</span>
+            </div>
+          </div>
+          <div class="cv-item">
+            <div class="cv-label">B.S.</div>
+            <div class="cv-main">
+              Electrical Engineering
+              <span class="cv-sub">Shanghai Normal University</span>
+            </div>
+          </div>
+          <div class="cv-item">
+            <div class="cv-label">Focus</div>
+            <div class="cv-main">
+              AI for Power &amp; Energy Systems
+              <span class="cv-sub">LLMs · Graph Learning · Spatiotemporal Modeling · Grid Resilience</span>
+            </div>
+          </div>
+        </div>
+
         <div class="chips" id="panelChips"></div>
         <div class="panel-foot">
           <a href="#" id="fakeLink">Explore section ↗</a>
@@ -583,6 +666,7 @@
       const panelText = document.getElementById("panelText");
       const panelChips = document.getElementById("panelChips");
       const contactList = document.getElementById("contactList");
+      const cvList = document.getElementById("cvList");
       const closeBtn = document.getElementById("closeBtn");
       const fakeLink = document.getElementById("fakeLink");
 
@@ -653,8 +737,8 @@
           weight: 0.44,
           ax: 830, ay: 635,
           title: "CV",
-          text: "A concise overview of my academic background, research experience, publications, teaching, awards, and professional activities.",
-          chips: ["Education", "Research", "Publications", "Teaching"]
+          text: "",
+          chips: []
         },
 
         {
@@ -969,6 +1053,10 @@
         selectedId = id;
         const n = nodeMap.get(id);
 
+        // Dedicated card content must only appear for its matching node.
+        contactList.hidden = n.id !== "contact";
+        cvList.hidden = n.id !== "cv";
+
         // Research expands directly inside the graph instead of opening a text card.
         if (n.id === "research") {
           panel.classList.remove("show");
@@ -986,8 +1074,6 @@
           chip.textContent = t;
           panelChips.appendChild(chip);
         });
-
-        contactList.hidden = n.id !== "contact";
 
         if (n.id === "about" || n.id === "contact" || n.id === "news") {
           fakeLink.removeAttribute("target");
@@ -1032,6 +1118,7 @@
       function clearSelection() {
         selectedId = null;
         contactList.hidden = true;
+        cvList.hidden = true;
         panel.classList.remove("show");
         panel.setAttribute("aria-hidden", "true");
       }
