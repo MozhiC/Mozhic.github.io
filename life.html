@@ -12,13 +12,10 @@
       --text: #0b1730;
       --muted: #68778b;
       --accent: #173f72;
-      --line: rgba(112,132,156,.28);
-      --paper: rgba(255,255,255,.58);
+      --line: rgba(112,132,156,.26);
     }
 
     * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
@@ -26,25 +23,25 @@
       color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at 14% 10%, rgba(69,104,145,.10), transparent 25rem),
-        linear-gradient(180deg, #f6f8fb 0%, var(--bg) 100%);
+        radial-gradient(circle at 14% 8%, rgba(69,104,145,.09), transparent 24rem),
+        linear-gradient(180deg, #f7f9fb 0%, var(--bg) 100%);
     }
 
     .page {
-      width: min(1120px, calc(100% - 32px));
+      width: min(1100px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 30px 0 90px;
+      padding: 30px 0 88px;
     }
 
     .back {
       display: inline-flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
       color: var(--accent);
       text-decoration: none;
       font-size: 13px;
       font-weight: 850;
-      margin-bottom: 54px;
+      margin-bottom: 46px;
     }
 
     .back::before {
@@ -52,85 +49,137 @@
       font-size: 18px;
     }
 
-    .hero {
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 60px;
+    .header {
+      display: flex;
+      justify-content: space-between;
       align-items: end;
-      padding-bottom: 72px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .kicker {
-      color: #61758d;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      margin-bottom: 14px;
+      gap: 30px;
+      margin-bottom: 30px;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(72px, 10vw, 132px);
-      line-height: .82;
-      letter-spacing: -.075em;
+      font-size: clamp(64px, 9vw, 116px);
+      line-height: .84;
+      letter-spacing: -.07em;
       font-weight: 930;
     }
 
     h1 em {
-      display: block;
-      margin-left: .55em;
       color: #6d8199;
       font-weight: 620;
     }
 
-    .intro {
-      max-width: 440px;
-      margin: 0 0 10px auto;
-      color: #526176;
-      font-size: 15px;
-      line-height: 1.75;
+    .header p {
+      margin: 0 0 5px;
+      max-width: 340px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
       font-weight: 560;
     }
 
-    .journal {
-      padding-top: 72px;
+    .climb-hero {
       display: grid;
-      gap: 96px;
-    }
-
-    .story {
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr);
-      gap: 54px;
+      grid-template-columns: minmax(280px, 420px) 1fr;
+      gap: clamp(42px, 7vw, 96px);
       align-items: center;
+      padding: 42px 3% 76px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
     }
 
-    .story.reverse {
-      grid-template-columns: minmax(260px, .85fr) minmax(0, 1.15fr);
+    .video-frame {
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #dbe5f0;
+      box-shadow: 0 24px 52px rgba(29,55,87,.12);
     }
 
-    .story.reverse .photo {
-      order: 2;
+    .video-frame video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      background: #101722;
     }
 
-    .story.reverse .copy {
-      order: 1;
-      padding-left: 6%;
+    .climb-copy {
+      max-width: 520px;
+    }
+
+    .climb-label {
+      color: #7a899c;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .climb-copy h2 {
+      margin: 0;
+      font-size: clamp(54px, 7vw, 92px);
+      line-height: .92;
+      letter-spacing: -.065em;
+      font-weight: 920;
+      max-width: 500px;
+    }
+
+    .climb-copy p {
+      margin: 20px 0 0;
+      max-width: 310px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+      font-weight: 600;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 22px;
+      margin-top: 70px;
     }
 
     .photo {
       position: relative;
-      min-height: 430px;
       overflow: hidden;
-      border-radius: 4px;
+      min-height: 360px;
       background: #dbe5f0;
-      box-shadow: 0 20px 42px rgba(29,55,87,.08);
+      border-radius: 6px;
     }
 
-    .photo.small {
-      min-height: 360px;
+    .photo.tall {
+      min-height: 520px;
+    }
+
+    .collection-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .collection-pair .photo {
+      min-height: 390px;
+    }
+
+    .collection-pair .photo:nth-child(2) {
+      margin-top: 58px;
+    }
+
+    .collection-labels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+      color: #65758a;
+      font-size: 12px;
+      line-height: 1.4;
+      font-weight: 750;
     }
 
     .photo img {
@@ -139,7 +188,6 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
     }
 
     .fallback {
@@ -148,7 +196,7 @@
       display: grid;
       place-items: center;
       padding: 20px;
-      color: #77879b;
+      color: #7a899c;
       font-size: 11px;
       font-weight: 850;
       letter-spacing: .10em;
@@ -156,72 +204,40 @@
       text-align: center;
     }
 
-    .copy {
-      max-width: 360px;
+    .photo-block {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .num {
-      color: #8b98a8;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .14em;
-      margin-bottom: 12px;
-    }
-
-    .copy h2 {
-      margin: 0;
-      font-size: clamp(30px, 4vw, 48px);
-      line-height: 1;
-      letter-spacing: -.05em;
-      font-weight: 900;
-    }
-
-    .copy p {
-      margin: 15px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.7;
-      font-weight: 560;
-    }
-
-    .mini-row {
+    .right-stack {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 22px;
-      margin-top: 4px;
+      gap: 28px;
     }
 
-    .mini {
-      position: relative;
+    .right-stack .photo {
+      min-height: 249px;
     }
 
-    .mini-photo {
-      position: relative;
-      aspect-ratio: 4 / 3;
-      overflow: hidden;
-      border-radius: 4px;
-      background: #dbe5f0;
-    }
-
-    .mini-photo img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .mini .label {
-      margin-top: 10px;
-      color: #536379;
+    .caption {
+      color: #65758a;
       font-size: 12px;
       line-height: 1.5;
-      font-weight: 700;
+      font-weight: 650;
+    }
+
+    .caption strong {
+      display: block;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.2;
+      font-weight: 900;
+      margin-bottom: 3px;
     }
 
     .closing {
-      margin-top: 100px;
-      padding-top: 42px;
+      margin-top: 68px;
+      padding-top: 34px;
       border-top: 1px solid var(--line);
       display: flex;
       justify-content: space-between;
@@ -230,54 +246,65 @@
     }
 
     .closing strong {
-      font-size: clamp(30px, 4vw, 50px);
+      font-size: clamp(28px, 4vw, 46px);
       letter-spacing: -.05em;
       font-weight: 850;
     }
 
     .closing span {
-      color: #78869a;
+      color: #8390a2;
       font-size: 12px;
       font-weight: 750;
     }
 
-    @media (max-width: 780px) {
+    @media (max-width: 760px) {
       .page {
-        width: min(100% - 20px, 1120px);
+        width: min(100% - 20px, 1100px);
         padding-top: 22px;
       }
 
-      .hero,
-      .story,
-      .story.reverse {
+      .header {
+        display: block;
+      }
+
+      .header p {
+        margin-top: 18px;
+      }
+
+      .climb-hero {
         grid-template-columns: 1fr;
-        gap: 28px;
-      }
-
-      .intro {
-        margin-left: 0;
-      }
-
-      .story.reverse .photo,
-      .story.reverse .copy {
-        order: initial;
-      }
-
-      .story.reverse .copy {
         padding-left: 0;
+        padding-right: 0;
+        gap: 30px;
+      }
+
+      .video-frame {
+        width: min(82vw, 390px);
+        margin: 0 auto;
+      }
+
+      .climb-copy {
+        max-width: 100%;
+      }
+
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .collection-pair {
+        gap: 10px;
+      }
+
+      .collection-pair .photo,
+      .collection-pair .photo:nth-child(2) {
+        min-height: 62vw;
+        margin-top: 0;
       }
 
       .photo,
-      .photo.small {
-        min-height: 68vw;
-      }
-
-      .journal {
-        gap: 70px;
-      }
-
-      .mini-row {
-        grid-template-columns: 1fr;
+      .photo.tall,
+      .right-stack .photo {
+        min-height: 70vw;
       }
 
       .closing {
@@ -292,94 +319,88 @@
   <main class="page">
     <a class="back" href="index.html">Back to Power Grid</a>
 
-    <section class="hero">
-      <div>
-        <div class="kicker">Outside research</div>
-        <h1>Life <em>lately.</em></h1>
-      </div>
-
-      <p class="intro">
+    <section class="header">
+      <h1>Life <em>lately.</em></h1>
+      <p>
         A quieter corner of the site — places I go, things I enjoy,
         and a few moments worth keeping.
       </p>
     </section>
 
-    <section class="journal">
-      <article class="story">
-        <div class="photo">
-          <img src="assets/life-travel.jpg" alt="Travel"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
-          <div class="fallback" style="display:none;">assets/life-travel.jpg</div>
-        </div>
+    <section class="climb-hero">
+      <div class="video-frame">
+        <video
+          src="assets/climbing.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+          controls
+          preload="metadata">
+          Your browser does not support the video tag.
+        </video>
+      </div>
 
-        <div class="copy">
-          <div class="num">01 / TRAVEL</div>
-          <h2>Somewhere new.</h2>
-          <p>
-            I like getting out of routine once in a while — new cities,
-            long drives, random food stops, and places that look better
-            in person than in photos.
-          </p>
-        </div>
-      </article>
+      <div class="climb-copy">
+        <div class="climb-label">Climbing</div>
+        <h2>Trying not<br>to fall.</h2>
+        <p>
+          Still figuring it out. That is probably part of the fun.
+        </p>
+      </div>
+    </section>
 
-      <article class="story reverse">
-        <div class="photo small">
-          <img src="assets/life-tennis.jpg" alt="Tennis"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
-          <div class="fallback" style="display:none;">assets/life-tennis.jpg</div>
-        </div>
-
-        <div class="copy">
-          <div class="num">02 / MOVE</div>
-          <h2>Off the screen.</h2>
-          <p>
-            Tennis, climbing, swimming — mostly anything that gets me moving
-            and gives my brain something completely different to think about.
-          </p>
-        </div>
-      </article>
-
-      <div class="mini-row">
-        <figure class="mini">
-          <div class="mini-photo">
-            <img src="assets/life-climbing.jpg" alt="Climbing"
+    <section class="gallery">
+      <div>
+        <div class="collection-pair">
+          <div class="photo">
+            <img src="assets/life-lp.jpg" alt="LP collection"
                  onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
-            <div class="fallback" style="display:none;">assets/life-climbing.jpg</div>
+            <div class="fallback" style="display:none;">assets/life-lp.jpg</div>
           </div>
-          <figcaption class="label">Trying not to fall.</figcaption>
-        </figure>
 
-        <figure class="mini">
-          <div class="mini-photo">
-            <img src="assets/life-moment.jpg" alt="Everyday moment"
+          <div class="photo">
+            <img src="assets/life-kpop.jpg" alt="K-pop collection"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+            <div class="fallback" style="display:none;">assets/life-kpop.jpg</div>
+          </div>
+        </div>
+
+        <div class="collection-labels">
+          <div>LP collection</div>
+          <div>K-pop collection</div>
+        </div>
+      </div>
+
+      <div class="right-stack">
+        <div class="photo-block">
+          <div class="photo">
+            <img src="assets/life-moment.jpg" alt="Life moment"
                  onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
             <div class="fallback" style="display:none;">assets/life-moment.jpg</div>
           </div>
-          <figcaption class="label">No special occasion required.</figcaption>
-        </figure>
+          <div class="caption">
+            <strong>Little things.</strong>
+            No special occasion required.
+          </div>
+        </div>
+
+        <div class="photo-block">
+          <div class="photo">
+            <img src="assets/life-night.jpg" alt="Life at night"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+            <div class="fallback" style="display:none;">assets/life-night.jpg</div>
+          </div>
+          <div class="caption">
+            <strong>The part that stays off the CV.</strong>
+            Friends, food, late nights, and ordinary days.
+          </div>
+        </div>
       </div>
-
-      <article class="story">
-        <div class="photo">
-          <img src="assets/life-night.jpg" alt="Night memory"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
-          <div class="fallback" style="display:none;">assets/life-night.jpg</div>
-        </div>
-
-        <div class="copy">
-          <div class="num">03 / MOMENTS</div>
-          <h2>The part that stays off the CV.</h2>
-          <p>
-            Friends, food, late nights, small wins, and ordinary days.
-            Nothing particularly impressive — which is kind of the point.
-          </p>
-        </div>
-      </article>
     </section>
 
     <section class="closing">
-      <strong>more life, less formatting.</strong>
+      <strong>one in a million moments.</strong>
       <span>to be continued ✦</span>
     </section>
   </main>
