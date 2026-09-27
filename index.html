@@ -24,8 +24,8 @@
       min-height: 100%;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at 47% 38%, rgba(22,63,115,.10), transparent 34rem),
-        linear-gradient(180deg, #f5f7fa 0%, var(--bg) 100%);
+        radial-gradient(circle at 47% 38%, rgba(22,63,115,.14), transparent 35rem),
+        linear-gradient(180deg, #f2f5f9 0%, #e9eef4 100%);
       color: var(--text);
     }
 
@@ -86,6 +86,37 @@
       touch-action: manipulation;
     }
 
+
+    .ambient-edge {
+      stroke: #aebbc9;
+      stroke-width: 1.35;
+      stroke-linecap: round;
+      opacity: .36;
+      pointer-events: none;
+    }
+
+    .ambient-node {
+      fill: #71839a;
+      pointer-events: none;
+    }
+
+    .ambient-node.far {
+      opacity: .17;
+    }
+
+    .ambient-node.mid {
+      opacity: .28;
+    }
+
+    .ambient-node.near {
+      opacity: .43;
+    }
+
+    .ambient-node.major {
+      fill: #536b86;
+      opacity: .50;
+    }
+
     .edge {
       stroke: var(--line);
       stroke-linecap: round;
@@ -98,9 +129,10 @@
     }
 
     .node circle {
-      fill: rgba(248,250,253,.98);
-      stroke: #aab5c3;
-      stroke-width: 2.15;
+      fill: rgba(210, 224, 241, 0.96);
+      stroke: #94a5b9;
+      stroke-width: 2.25;
+      filter: drop-shadow(0 7px 12px rgba(22,63,115,.055));
     }
 
     .node text {
@@ -117,6 +149,15 @@
     .node .sub {
       fill: var(--muted);
       font-weight: 650;
+    }
+
+    .node circle {
+      transition: fill .28s ease, stroke .28s ease, filter .28s ease;
+    }
+
+    .node:hover circle {
+      fill: rgba(194, 214, 238, 0.98);
+      filter: drop-shadow(0 10px 16px rgba(22,63,115,.10));
     }
 
     .center .ring {
@@ -391,25 +432,27 @@
       <svg id="graph" viewBox="0 0 1200 740" role="img" aria-label="Organic personal knowledge graph">
         <defs>
           <clipPath id="portraitClip">
-            <circle cx="0" cy="0" r="74"></circle>
+            <circle cx="0" cy="0" r="81"></circle>
           </clipPath>
         </defs>
 
+        <g id="ambientEdges"></g>
+        <g id="ambientNodes"></g>
         <g id="edges"></g>
         <g id="dots"></g>
 
-        <g class="center" transform="translate(610 362)">
-          <circle class="ring" r="87"></circle>
-          <circle class="fill" r="74"></circle>
+        <g class="center" transform="translate(585 360)">
+          <circle class="ring" r="95"></circle>
+          <circle class="fill" r="81"></circle>
           <text class="initials" y="10">MC</text>
           <image
             href="assets/profile.jpg"
-            x="-74" y="-74" width="148" height="148"
+            x="-81" y="-81" width="162" height="162"
             preserveAspectRatio="xMidYMid slice"
             clip-path="url(#portraitClip)">
           </image>
-          <text class="name" y="124">Mozhi Chen</text>
-          <text class="role" y="147">Ph.D. Candidate · Electrical Engineering</text>
+          <text class="name" y="134">Mozhi Chen</text>
+          <text class="role" y="158">Ph.D. Candidate · Electrical Engineering</text>
         </g>
 
         <g id="nodes"></g>
@@ -435,6 +478,8 @@
       const stage = document.getElementById("stage");
       const introOverlay = document.getElementById("introOverlay");
       const enterButton = document.getElementById("enterButton");
+      const ambientEdgeLayer = document.getElementById("ambientEdges");
+      const ambientNodeLayer = document.getElementById("ambientNodes");
       const edgeLayer = document.getElementById("edges");
       const nodeLayer = document.getElementById("nodes");
       const dotLayer = document.getElementById("dots");
@@ -450,9 +495,9 @@
 
       const center = {
         id: "me",
-        x: 610,
-        y: 362,
-        r: 87
+        x: 585,
+        y: 360,
+        r: 95
       };
 
       // "weight" controls visual size and physical influence.
@@ -463,7 +508,7 @@
           label: "RESEARCH",
           sub: "Ideas & themes",
           weight: 1.00,
-          ax: 388, ay: 182,
+          ax: 315, ay: 160,
           title: "Research",
           text: "Your main research directions. This should later branch into Graph Learning, LLM × Energy, Power Systems and other subtopics.",
           chips: ["Graph learning", "LLMs", "Power systems"]
@@ -473,7 +518,7 @@
           label: "PAPERS",
           sub: "Publications",
           weight: 0.88,
-          ax: 770, ay: 145,
+          ax: 835, ay: 125,
           title: "Papers",
           text: "A publication hub with readable paper cards, year filters and links.",
           chips: ["Selected papers", "PDF", "DOI"]
@@ -483,7 +528,7 @@
           label: "PROJECTS",
           sub: "Selected work",
           weight: 0.78,
-          ax: 355, ay: 570,
+          ax: 285, ay: 585,
           title: "Projects",
           text: "Selected research projects, each with a project page, paper and code.",
           chips: ["GridGraph-LLM", "SolarDisagg-LLM", "More"]
@@ -493,7 +538,7 @@
           label: "ABOUT",
           sub: "Who I am",
           weight: 0.58,
-          ax: 210, ay: 330,
+          ax: 145, ay: 325,
           title: "About me",
           text: "A short personal introduction, education and research interests.",
           chips: ["Bio", "Education", "Interests"]
@@ -503,7 +548,7 @@
           label: "NEWS",
           sub: "Updates",
           weight: 0.49,
-          ax: 1005, ay: 255,
+          ax: 1080, ay: 235,
           title: "News",
           text: "Awards, conference presentations and academic milestones.",
           chips: ["Awards", "Talks", "Updates"]
@@ -513,7 +558,7 @@
           label: "CV",
           sub: "Experience",
           weight: 0.44,
-          ax: 770, ay: 608,
+          ax: 830, ay: 635,
           title: "CV",
           text: "Education, experience and a link to the full PDF CV.",
           chips: ["Education", "Experience", "PDF"]
@@ -523,7 +568,7 @@
           label: "CONTACT",
           sub: "Connect",
           weight: 0.37,
-          ax: 1015, ay: 500,
+          ax: 1090, ay: 525,
           title: "Contact",
           text: "Email, Google Scholar, GitHub and LinkedIn.",
           chips: ["Email", "Scholar", "GitHub"]
@@ -547,7 +592,7 @@
       ];
 
       const nodes = nodeData.map((d, i) => {
-        const r = 34 + d.weight * 34;
+        const r = 38 + d.weight * 39;
         return {
           ...d,
           r,
@@ -582,6 +627,93 @@
         }
         return el;
       }
+
+
+      // Ambient power-grid layer: purely visual, non-interactive.
+      // It fills the canvas without creating fake navigation items.
+      const ambientNodes = [
+        {x: 110, y: 120, r: 4.2, p: .3},
+        {x: 185, y: 175, r: 4.6, p: 1.2},
+        {x: 245, y: 90,  r: 3.1, p: 2.1},
+        {x: 320, y: 95,  r: 4.6, p: 2.8},
+        {x: 420, y: 80,  r: 2.9, p: 3.7},
+        {x: 520, y: 118, r: 3.8, p: 4.4},
+        {x: 655, y: 85,  r: 4.4, p: 5.0},
+        {x: 755, y: 78,  r: 4.4, p: 5.8},
+        {x: 920, y: 105, r: 3.6, p: 6.6},
+        {x: 1060,y: 115, r: 4.1, p: 7.2},
+        {x: 1140,y: 175, r: 3.1, p: 8.0},
+        {x: 1115,y: 330, r: 3.9, p: 8.7},
+        {x: 1145,y: 430, r: 3.1, p: 9.5},
+        {x: 1080,y: 620, r: 4.4, p: 10.1},
+        {x: 960, y: 665, r: 3.0, p: 11.0},
+        {x: 875, y: 690, r: 3.8, p: 11.8},
+        {x: 735, y: 675, r: 3.1, p: 12.6},
+        {x: 620, y: 700, r: 4.4, p: 13.3},
+        {x: 500, y: 675, r: 4.4, p: 14.1},
+        {x: 380, y: 700, r: 3.9, p: 15.0},
+        {x: 255, y: 660, r: 4.1, p: 15.8},
+        {x: 150, y: 605, r: 3.1, p: 16.5},
+        {x: 95,  y: 500, r: 4.1, p: 17.2},
+        {x: 125, y: 400, r: 3.0, p: 18.0},
+        {x: 90,  y: 285, r: 3.5, p: 18.7},
+        {x: 220, y: 260, r: 4.6, p: 19.5},
+        {x: 335, y: 300, r: 3.1, p: 20.3},
+        {x: 460, y: 235, r: 4.1, p: 21.0},
+        {x: 700, y: 255, r: 3.0, p: 21.8},
+        {x: 900, y: 290, r: 3.8, p: 22.6},
+        {x: 980, y: 410, r: 3.1, p: 23.2},
+        {x: 900, y: 530, r: 4.1, p: 24.0},
+        {x: 690, y: 545, r: 4.6, p: 24.8},
+        {x: 510, y: 560, r: 3.1, p: 25.6},
+        {x: 350, y: 505, r: 3.9, p: 26.4}
+      ];
+
+      const ambientLinks = [
+        [0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],
+        [10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,17],[17,18],
+        [18,19],[19,20],[20,21],[21,22],[22,23],[23,24],[24,0],
+        [1,25],[25,26],[26,27],[27,28],[28,29],[29,30],[30,31],[31,32],
+        [32,33],[33,34],[34,20],
+        [3,26],[5,27],[8,28],[11,29],[13,30],[15,31],[17,32],[19,33],[22,34],
+        [26,34],[27,33],[28,32],[29,31]
+      ];
+
+      const ambientEdgeEls = [];
+      ambientLinks.forEach(([a, b], i) => {
+        const line = make("line", {
+          class: "ambient-edge",
+          x1: ambientNodes[a].x,
+          y1: ambientNodes[a].y,
+          x2: ambientNodes[b].x,
+          y2: ambientNodes[b].y
+        });
+        ambientEdgeLayer.appendChild(line);
+        ambientEdgeEls.push({ line, a, b });
+      });
+
+      const ambientNodeEls = [];
+      ambientNodes.forEach((n, i) => {
+        let depthClass = "mid";
+        if (i % 6 === 0) depthClass = "major";
+        else if (i % 3 === 0) depthClass = "near";
+        else if (i % 3 === 1) depthClass = "mid";
+        else depthClass = "far";
+
+        const radiusScale =
+          depthClass === "major" ? 1.28 :
+          depthClass === "near" ? 1.16 :
+          depthClass === "far" ? 0.88 : 1.0;
+
+        const c = make("circle", {
+          class: `ambient-node ${depthClass}`,
+          cx: n.x,
+          cy: n.y,
+          r: (n.r * radiusScale).toFixed(2)
+        });
+        ambientNodeLayer.appendChild(c);
+        ambientNodeEls.push(c);
+      });
 
       // subtle unlabeled micro-points for extra organic depth
       const dots = [
@@ -877,6 +1009,30 @@
       function render() {
         updateTargets();
 
+        const now = performance.now() / 1000;
+
+        ambientNodes.forEach((n, i) => {
+          const drift = reducedMotion ? 0 : 5.5;
+          const x = n.x + Math.sin(now * 0.18 + n.p) * drift;
+          const y = n.y + Math.cos(now * 0.15 + n.p * 1.13) * drift;
+          n.rx = x;
+          n.ry = y;
+          ambientNodeEls[i].setAttribute("cx", x.toFixed(2));
+          ambientNodeEls[i].setAttribute("cy", y.toFixed(2));
+        });
+
+        ambientEdgeEls.forEach(({ line, a, b }, i) => {
+          line.setAttribute("x1", ambientNodes[a].rx.toFixed(2));
+          line.setAttribute("y1", ambientNodes[a].ry.toFixed(2));
+          line.setAttribute("x2", ambientNodes[b].rx.toFixed(2));
+          line.setAttribute("y2", ambientNodes[b].ry.toFixed(2));
+
+          // very subtle breathing of the ambient grid
+          const depthBase = i % 4 === 0 ? 0.38 : i % 4 === 1 ? 0.30 : 0.23;
+          const pulse = 0.07 * (0.5 + 0.5 * Math.sin(now * 0.12 + i * 0.7));
+          line.style.opacity = (depthBase + pulse).toFixed(3);
+        });
+
         for (const n of nodes) {
           const el = nodeEls.get(n.id);
           const selected = n.id === selectedId;
@@ -889,12 +1045,20 @@
 
           el.c.setAttribute(
             "stroke",
-            selected || n.hover ? "#163f73" : "#aab5c3"
+            selected || n.hover ? "#163f73" : "#94a5b9"
           );
           el.c.setAttribute(
             "stroke-width",
-            selected ? "3.2" : n.hover ? "2.7" : "2.15"
+            selected ? "3.2" : n.hover ? "2.7" : "2.25"
           );
+
+          if (selected) {
+            el.c.setAttribute("fill", "rgba(180, 205, 235, 0.98)");
+          } else if (n.hover) {
+            el.c.setAttribute("fill", "rgba(194, 214, 238, 0.98)");
+          } else {
+            el.c.setAttribute("fill", "rgba(210, 224, 241, 0.96)");
+          }
 
           el.sub.style.opacity = selected ? "1" : n.hover ? ".9" : ".38";
         }
@@ -920,7 +1084,7 @@
           if (!selectedId) {
             const peripheral = aId !== "me" && bId !== "me";
             edge.style.opacity = peripheral ? "0.55" : "0.78";
-            edge.setAttribute("stroke", "#cbd2dc");
+            edge.setAttribute("stroke", "#aeb8c6");
             edge.setAttribute("stroke-width", peripheral ? "1.7" : "2.05");
           } else {
             const touchesSelected = aId === selectedId || bId === selectedId;
@@ -934,7 +1098,7 @@
               edge.setAttribute("stroke-width", "2.8");
             } else {
               edge.style.opacity = "0.14";
-              edge.setAttribute("stroke", "#cbd2dc");
+              edge.setAttribute("stroke", "#aeb8c6");
               edge.setAttribute("stroke-width", "1.45");
             }
           }
