@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Publications by Mozhi Chen." />
+  <title>Publications — Mozhi Chen</title>
+
+  <style>
+    :root {
+      --bg: #e9eef4;
+      --paper: rgba(245, 248, 252, 0.88);
+      --card: rgba(255,255,255,.72);
+      --text: #09152b;
+      --muted: #596475;
+      --line: #aeb8c6;
+      --accent: #163f73;
+      --accent-soft: #d7e4f3;
+      --published: #214f3d;
+      --published-bg: #e1eee8;
+      --review: #775617;
+      --review-bg: #f4ead2;
+      --accepted: #37536f;
+      --accepted-bg: #e1e9f2;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 22% 12%, rgba(22,63,115,.12), transparent 28rem),
+        radial-gradient(circle at 86% 42%, rgba(22,63,115,.06), transparent 30rem),
+        linear-gradient(180deg, #f2f5f9 0%, var(--bg) 100%);
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 70px;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 48px;
+    }
+
+    .back::before {
+      content: "←";
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .hero {
+      max-width: 800px;
+      margin-bottom: 52px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(48px, 8vw, 92px);
+      line-height: .92;
+      letter-spacing: -.065em;
+      font-weight: 900;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: 22px 0 0;
+      color: #465367;
+      font-size: 17px;
+      line-height: 1.72;
+      font-weight: 540;
+    }
+
+    .summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 24px;
+    }
+
+    .summary span {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid #b7c5d5;
+      background: rgba(215,228,243,.82);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .year-block {
+      margin-top: 48px;
+    }
+
+    .year-heading {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .year-heading h2 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -.04em;
+    }
+
+    .year-heading::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: rgba(124,141,160,.38);
+    }
+
+    .paper-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .paper {
+      position: relative;
+      padding: 22px 22px 20px;
+      border-radius: 22px;
+      border: 1px solid rgba(148,165,185,.58);
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      transition: transform .22s ease, border-color .22s ease, background .22s ease;
+    }
+
+    @media (hover:hover) {
+      .paper:hover {
+        transform: translateY(-2px);
+        border-color: rgba(22,63,115,.42);
+        background: rgba(255,255,255,.88);
+      }
+    }
+
+    .paper-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .paper h3 {
+      margin: 0;
+      max-width: 800px;
+      font-size: 18px;
+      line-height: 1.42;
+      letter-spacing: -.018em;
+      font-weight: 850;
+    }
+
+    .status {
+      flex: 0 0 auto;
+      padding: 6px 9px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .status.published {
+      color: var(--published);
+      background: var(--published-bg);
+      border: 1px solid rgba(33,79,61,.15);
+    }
+
+    .status.review {
+      color: var(--review);
+      background: var(--review-bg);
+      border: 1px solid rgba(119,86,23,.15);
+    }
+
+    .status.accepted {
+      color: var(--accepted);
+      background: var(--accepted-bg);
+      border: 1px solid rgba(55,83,111,.15);
+    }
+
+    .authors {
+      margin-top: 10px;
+      color: #34445a;
+      font-size: 13px;
+      line-height: 1.55;
+      font-weight: 650;
+    }
+
+    .venue {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      font-weight: 560;
+    }
+
+    .venue strong {
+      color: #33445a;
+      font-weight: 800;
+    }
+
+    .footer-note {
+      margin-top: 46px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 680px) {
+      .shell {
+        width: min(100% - 20px, 1080px);
+        padding-top: 22px;
+      }
+
+      .back { margin-bottom: 36px; }
+
+      .paper {
+        padding: 18px;
+        border-radius: 18px;
+      }
+
+      .paper-top {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .status {
+        align-self: flex-start;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+    <a class="back" href="index.html">Back to Power Grid</a>
+
+    <section class="hero">
+      <div class="eyebrow">Research output</div>
+      <h1>Publications</h1>
+      <p>
+        Selected journal and conference publications across power and energy systems,
+        graph learning, large language models, spatiotemporal modeling, solar disaggregation,
+        electric-vehicle charging, grid data analytics, and fuel-cell manufacturing.
+      </p>
+
+      <div class="summary">
+        <span>8 papers</span>
+        <span>2025–2026</span>
+        <span>Journal + Conference</span>
+      </div>
+    </section>
+
+    <section class="year-block">
+      <div class="year-heading"><h2>2026</h2></div>
+
+      <div class="paper-list">
+        <article class="paper">
+          <div class="paper-top">
+            <h3>GridGraph-LLM: Graph-Aware Large Language Models for Contingency Analysis and Transmission Line Failure Localization</h3>
+            <span class="status published">Published</span>
+          </div>
+          <div class="venue"><strong>Applied Energy</strong> · 2026</div>
+        </article>
+
+        <article class="paper">
+          <div class="paper-top">
+            <h3>Learning Transmission Outages with Electrical Distance Reconstructed High-Order Topological Graph Convolutional Networks</h3>
+            <span class="status review">Under Review</span>
+          </div>
+          <div class="venue"><strong>IEEE Transactions on Power Systems</strong> · 2026</div>
+        </article>
+
+        <article class="paper">
+          <div class="paper-top">
+            <h3>AI-Assisted Stack Break-in for Accelerated Manufacturing of Hydrogen Fuel Cells</h3>
+            <span class="status published">Published</span>
+          </div>
+          <div class="venue"><strong>IEEE Journal of Emerging and Selected Topics in Power Electronics</strong> · 2026</div>
+        </article>
+
+        <article class="paper">
+          <div class="paper-top">
+            <h3>Data-Driven Graph Learning for Transmission Network Partitioning under N-1 Contingencies</h3>
+            <span class="status accepted">Accepted</span>
+          </div>
+          <div class="venue"><strong>IEEE Power &amp; Energy Society General Meeting</strong> · 2026</div>
+        </article>
+
+        <article class="paper">
+          <div class="paper-top">
+            <h3>SolarDisagg-LLM: Leveraging Time Series Reprogramming of Large Language Models for Solar Disaggregation</h3>
+            <span class="status accepted">Accepted</span>
+          </div>
+          <div class="venue"><strong>IEEE Power &amp; Energy Society General Meeting</strong> · 2026</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="year-block">
+      <div class="year-heading"><h2>2025</h2></div>
+
+      <div class="paper-list">
+        <article class="paper">
+          <div class="paper-top">
+            <h3>Characterization of Transmission Nodal Profiles via Graph-Embedded Topological Data Analysis</h3>
+            <span class="status accepted">Accepted</span>
+          </div>
+          <div class="authors">M. Chen, Z. Zhao, L. Du, Y. Chen</div>
+          <div class="venue"><strong>2025 IEEE Power &amp; Energy Society General Meeting</strong> · July 27–31, 2025</div>
+        </article>
+
+        <article class="paper">
+          <div class="paper-top">
+            <h3>Disaggregation of EV Charging Profiles via Spatio-Temporal Graph Convolutional Networks</h3>
+            <span class="status accepted">Accepted</span>
+          </div>
+          <div class="authors">M. Chen, Z. Zhao, L. Du, Y. Chen</div>
+          <div class="venue"><strong>2025 IEEE Transportation Electrification Conference &amp; Expo + Electric Aircraft Technologies Symposium</strong> · June 18–20, 2025</div>
+        </article>
+
+        <article class="paper">
+          <div class="paper-top">
+            <h3>GNN-Based Autoformer For Imputing Missing Data in Transmission Grid Load Profiles Considering Seasonal Patterns</h3>
+            <span class="status accepted">Accepted</span>
+          </div>
+          <div class="authors">Z. Zhao, M. Chen, L. Du, D. Moscovitz, X. Fan</div>
+          <div class="venue"><strong>2025 IEEE Power &amp; Energy Society General Meeting</strong> · July 27–31, 2025</div>
+        </article>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      Publication links, DOI, PDF, and code links can be added individually once confirmed.
+    </div>
+  </main>
+</body>
+</html>
