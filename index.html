@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mozhi Chen — Organic Research Graph</title>
+
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --text: #0c162d;
+      --muted: #6f7786;
+      --line: #cbd2dc;
+      --accent: #163f73;
+      --accent-soft: #eaf0f7;
+      --panel: rgba(255,255,255,.88);
+      --shadow: 0 24px 80px rgba(25,42,70,.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 47% 38%, rgba(22,63,115,.065), transparent 33rem),
+        linear-gradient(180deg, #fcfdff 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    body { overflow-x: hidden; }
+
+    .shell {
+      width: min(1240px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 18px 0 40px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 8px 4px 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 1px solid #cbd2dc;
+      background: rgba(255,255,255,.7);
+      font-size: 11px;
+      letter-spacing: .08em;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stage {
+      position: relative;
+      border: 1px solid rgba(203,210,220,.72);
+      border-radius: 32px;
+      overflow: hidden;
+      background: rgba(255,255,255,.52);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 740px;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    .edge {
+      stroke: var(--line);
+      stroke-linecap: round;
+      pointer-events: none;
+    }
+
+    .node {
+      cursor: pointer;
+      outline: none;
+    }
+
+    .node circle {
+      fill: rgba(255,255,255,.98);
+      stroke: #c7ced8;
+      stroke-width: 1.4;
+    }
+
+    .node text {
+      pointer-events: none;
+      text-anchor: middle;
+    }
+
+    .node .label {
+      fill: var(--text);
+      font-weight: 800;
+      letter-spacing: .07em;
+    }
+
+    .node .sub {
+      fill: var(--muted);
+    }
+
+    .center .ring {
+      fill: #fff;
+      stroke: var(--accent);
+      stroke-width: 2.5;
+      filter: drop-shadow(0 16px 28px rgba(22,63,115,.15));
+    }
+
+    .center .fill { fill: var(--accent-soft); }
+
+    .center .initials {
+      fill: var(--accent);
+      font-weight: 800;
+      font-size: 31px;
+      text-anchor: middle;
+    }
+
+    .center .name {
+      fill: var(--text);
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      text-anchor: middle;
+    }
+
+    .center .role {
+      fill: var(--muted);
+      font-size: 12px;
+      text-anchor: middle;
+    }
+
+    .micro-dot {
+      fill: var(--accent);
+      pointer-events: none;
+    }
+
+    .panel {
+      position: absolute;
+      right: 28px;
+      bottom: 28px;
+      width: min(390px, calc(100% - 56px));
+      padding: 22px;
+      border-radius: 22px;
+      background: var(--panel);
+      border: 1px solid rgba(203,210,220,.86);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 55px rgba(25,42,70,.14);
+      opacity: 0;
+      transform: translateY(18px) scale(.985);
+      pointer-events: none;
+      transition: opacity .35s ease, transform .35s ease;
+    }
+
+    .panel.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .panel p {
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+      margin: 14px 0 16px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(22,63,115,.1);
+    }
+
+    .panel-foot {
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .panel-foot a {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .close {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 8px 10px;
+      border-radius: 10px;
+    }
+
+    .note {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      max-width: 275px;
+      padding: 11px 13px;
+      border-radius: 14px;
+      border: 1px solid rgba(203,210,220,.58);
+      background: rgba(255,255,255,.55);
+      backdrop-filter: blur(10px);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+
+    .intro-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 48%, rgba(22,63,115,.075), transparent 27rem),
+        rgba(251,252,254,.97);
+      transition: opacity .9s cubic-bezier(.22,.8,.2,1), visibility .9s ease;
+    }
+
+    .intro-overlay.exit {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .enter-button {
+      position: relative;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      padding: 36px 42px;
+      text-align: center;
+      border-radius: 32px;
+      transition: transform .35s ease, opacity .35s ease;
+    }
+
+    .enter-button:hover {
+      transform: scale(1.025);
+    }
+
+    .enter-button:focus-visible {
+      outline: 3px solid rgba(22,63,115,.22);
+      outline-offset: 4px;
+    }
+
+    .enter-kicker {
+      display: block;
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .enter-title {
+      display: block;
+      font-size: clamp(42px, 7vw, 92px);
+      line-height: .94;
+      letter-spacing: -0.065em;
+      font-weight: 820;
+    }
+
+    .enter-title em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .enter-hint {
+      display: block;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: .02em;
+    }
+
+    .enter-button::before,
+    .enter-button::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 78px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(22,63,115,.32));
+      opacity: .65;
+    }
+
+    .enter-button::before {
+      right: 100%;
+    }
+
+    .enter-button::after {
+      left: 100%;
+      transform: rotate(180deg);
+    }
+
+    .graph-content {
+      opacity: 0;
+      transform: scale(.985);
+      transform-origin: 50% 50%;
+      transition: opacity .75s ease, transform 1.05s cubic-bezier(.16,.84,.24,1);
+    }
+
+    .stage.entered .graph-content {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .stage:not(.entered) .panel,
+    .stage:not(.entered) .note {
+      opacity: 0 !important;
+      pointer-events: none;
+    }
+
+    @media (max-width: 820px) {
+      svg { height: 660px; }
+      .hint { display: none; }
+
+      .panel {
+        left: 18px;
+        right: 18px;
+        bottom: 18px;
+        width: auto;
+      }
+
+      .note {
+        left: 18px;
+        bottom: 18px;
+        max-width: 220px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .shell {
+        width: calc(100% - 16px);
+        padding-top: 8px;
+      }
+
+      .stage { border-radius: 23px; }
+      svg { height: 610px; }
+      .note { display: none; }
+      .panel h2 { font-size: 29px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .panel { transition: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="#">
+        <span class="brand-dot">MC</span>
+        <span>Mozhi Chen</span>
+      </a>
+      <div class="hint">Organic force graph • click a node to focus</div>
+    </header>
+
+    <section class="stage" id="stage">
+      <div class="intro-overlay" id="introOverlay">
+        <button class="enter-button" id="enterButton" type="button" aria-label="Enter Mozhi's Power Grid">
+          <span class="enter-kicker">Interactive research space</span>
+          <span class="enter-title">Enter Mozhi's<br><em>Power Grid</em></span>
+          <span class="enter-hint">Click to enter</span>
+        </button>
+      </div>
+
+      <div class="graph-content" id="graphContent">
+      <svg id="graph" viewBox="0 0 1200 740" role="img" aria-label="Organic personal knowledge graph">
+        <defs>
+          <clipPath id="portraitClip">
+            <circle cx="0" cy="0" r="74"></circle>
+          </clipPath>
+        </defs>
+
+        <g id="edges"></g>
+        <g id="dots"></g>
+
+        <g class="center" transform="translate(610 362)">
+          <circle class="ring" r="87"></circle>
+          <circle class="fill" r="74"></circle>
+          <text class="initials" y="10">MC</text>
+          <image
+            href="assets/profile.jpg"
+            x="-74" y="-74" width="148" height="148"
+            preserveAspectRatio="xMidYMid slice"
+            clip-path="url(#portraitClip)">
+          </image>
+          <text class="name" y="124">Mozhi Chen</text>
+          <text class="role" y="147">Ph.D. Candidate · Electrical Engineering</text>
+        </g>
+
+        <g id="nodes"></g>
+      </svg>
+
+      <div class="note">
+        这版不再是规则星形。节点有不同权重、不同尺寸、不同 link 长度，也有外围节点之间的连接，所以整体更像真正的 graph。
+      </div>
+
+      <aside class="panel" id="panel" aria-hidden="true">
+        <div class="eyebrow">Selected node</div>
+        <h2 id="panelTitle"></h2>
+        <p id="panelText"></p>
+        <div class="chips" id="panelChips"></div>
+        <div class="panel-foot">
+          <a href="#" id="fakeLink">Open section later ↗</a>
+          <button class="close" type="button" id="closeBtn">Close</button>
+        </div>
+      </aside>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const svg = document.getElementById("graph");
+      const stage = document.getElementById("stage");
+      const introOverlay = document.getElementById("introOverlay");
+      const enterButton = document.getElementById("enterButton");
+      const edgeLayer = document.getElementById("edges");
+      const nodeLayer = document.getElementById("nodes");
+      const dotLayer = document.getElementById("dots");
+
+      const panel = document.getElementById("panel");
+      const panelTitle = document.getElementById("panelTitle");
+      const panelText = document.getElementById("panelText");
+      const panelChips = document.getElementById("panelChips");
+      const closeBtn = document.getElementById("closeBtn");
+      const fakeLink = document.getElementById("fakeLink");
+
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const center = {
+        id: "me",
+        x: 610,
+        y: 362,
+        r: 87
+      };
+
+      // "weight" controls visual size and physical influence.
+      // Different anchors and radii intentionally make the layout asymmetric.
+      const nodeData = [
+        {
+          id: "research",
+          label: "RESEARCH",
+          sub: "Ideas & themes",
+          weight: 1.00,
+          ax: 388, ay: 182,
+          title: "Research",
+          text: "Your main research directions. This should later branch into Graph Learning, LLM × Energy, Power Systems and other subtopics.",
+          chips: ["Graph learning", "LLMs", "Power systems"]
+        },
+        {
+          id: "papers",
+          label: "PAPERS",
+          sub: "Publications",
+          weight: 0.88,
+          ax: 770, ay: 145,
+          title: "Papers",
+          text: "A publication hub with readable paper cards, year filters and links.",
+          chips: ["Selected papers", "PDF", "DOI"]
+        },
+        {
+          id: "projects",
+          label: "PROJECTS",
+          sub: "Selected work",
+          weight: 0.78,
+          ax: 355, ay: 570,
+          title: "Projects",
+          text: "Selected research projects, each with a project page, paper and code.",
+          chips: ["GridGraph-LLM", "SolarDisagg-LLM", "More"]
+        },
+        {
+          id: "about",
+          label: "ABOUT",
+          sub: "Who I am",
+          weight: 0.58,
+          ax: 210, ay: 330,
+          title: "About me",
+          text: "A short personal introduction, education and research interests.",
+          chips: ["Bio", "Education", "Interests"]
+        },
+        {
+          id: "news",
+          label: "NEWS",
+          sub: "Updates",
+          weight: 0.49,
+          ax: 1005, ay: 255,
+          title: "News",
+          text: "Awards, conference presentations and academic milestones.",
+          chips: ["Awards", "Talks", "Updates"]
+        },
+        {
+          id: "cv",
+          label: "CV",
+          sub: "Experience",
+          weight: 0.44,
+          ax: 770, ay: 608,
+          title: "CV",
+          text: "Education, experience and a link to the full PDF CV.",
+          chips: ["Education", "Experience", "PDF"]
+        },
+        {
+          id: "contact",
+          label: "CONTACT",
+          sub: "Connect",
+          weight: 0.37,
+          ax: 1015, ay: 500,
+          title: "Contact",
+          text: "Email, Google Scholar, GitHub and LinkedIn.",
+          chips: ["Email", "Scholar", "GitHub"]
+        },
+        {
+          id: "graph",
+          label: "GRAPH",
+          sub: "Learning",
+          weight: 0.29,
+          ax: 520, ay: 88,
+          title: "Graph learning",
+          text: "A smaller thematic node that hints at deeper graph navigation.",
+          chips: ["Topology", "GNN", "Networks"]
+        },
+        {
+          id: "llm",
+          label: "LLM × ENERGY",
+          sub: "Modeling",
+          weight: 0.34,
+          ax: 870, ay: 350,
+          title: "LLM × Energy",
+          text: "A smaller thematic node connected to research and projects.",
+          chips: ["LLM", "Time series", "Energy"]
+        }
+      ];
+
+      // Varied graph structure:
+      // not every node is attached only to the center.
+      const links = [
+        ["me", "research", 245],
+        ["me", "papers", 275],
+        ["me", "projects", 255],
+        ["me", "about", 335],
+        ["me", "cv", 300],
+        ["me", "contact", 355],
+        ["me", "news", 330],
+        ["research", "graph", 145],
+        ["research", "llm", 210],
+        ["research", "projects", 245],
+        ["papers", "research", 250],
+        ["papers", "news", 215],
+        ["projects", "llm", 260],
+        ["cv", "contact", 230]
+      ];
+
+      const nodes = nodeData.map((d, i) => {
+        const r = 34 + d.weight * 34;
+        return {
+          ...d,
+          r,
+          x: d.ax + Math.sin(i * 1.7) * 14,
+          y: d.ay + Math.cos(i * 1.3) * 12,
+          vx: 0,
+          vy: 0,
+          scale: 0.12,
+          opacity: 0,
+          targetScale: 1,
+          targetOpacity: 1,
+          hover: false,
+          phase: 0.7 + i * 1.28
+        };
+      });
+
+      const nodeMap = new Map(nodes.map(n => [n.id, n]));
+
+      let selectedId = null;
+      let last = performance.now();
+
+      let entered = false;
+      let enterStartedAt = 0;
+      const introDuration = 1800;
+
+      const NS = "http://www.w3.org/2000/svg";
+
+      function make(tag, attrs = {}) {
+        const el = document.createElementNS(NS, tag);
+        for (const [k, v] of Object.entries(attrs)) {
+          el.setAttribute(k, v);
+        }
+        return el;
+      }
+
+      // subtle unlabeled micro-points for extra organic depth
+      const dots = [
+        [170, 145, 3.2], [290, 95, 2.6], [1010, 130, 3],
+        [1100, 410, 2.5], [930, 650, 2.7], [170, 590, 2.8]
+      ];
+
+      dots.forEach(([x, y, r], i) => {
+        dotLayer.appendChild(make("circle", {
+          class: "micro-dot",
+          cx: x, cy: y, r,
+          opacity: 0.07 + i * 0.015
+        }));
+      });
+
+      const edgeEls = [];
+
+      links.forEach(([a, b, length], i) => {
+        const line = make("line", {
+          class: "edge",
+          "data-a": a,
+          "data-b": b,
+          "data-length": length
+        });
+        edgeLayer.appendChild(line);
+        edgeEls.push(line);
+      });
+
+      const nodeEls = new Map();
+
+      nodes.forEach(node => {
+        const g = make("g", {
+          class: "node",
+          tabindex: "0",
+          role: "button",
+          "aria-label": `Open ${node.title}`
+        });
+
+        const c = make("circle", { r: node.r });
+
+        const label = make("text", {
+          class: "label",
+          y: -1,
+          "font-size": (10.5 + node.weight * 2.6).toFixed(1)
+        });
+        label.textContent = node.label;
+
+        const sub = make("text", {
+          class: "sub",
+          y: 19,
+          "font-size": (8.8 + node.weight * 1.2).toFixed(1)
+        });
+        sub.textContent = node.sub;
+
+        g.append(c, label, sub);
+        nodeLayer.appendChild(g);
+        nodeEls.set(node.id, { g, c, label, sub });
+
+        g.addEventListener("mouseenter", () => node.hover = true);
+        g.addEventListener("mouseleave", () => node.hover = false);
+        g.addEventListener("focus", () => node.hover = true);
+        g.addEventListener("blur", () => node.hover = false);
+
+        g.addEventListener("click", (e) => {
+          e.stopPropagation();
+          selectNode(node.id);
+        });
+
+        g.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            selectNode(node.id);
+          }
+        });
+      });
+
+      function getNode(id) {
+        return id === "me" ? center : nodeMap.get(id);
+      }
+
+      function isLinkedToSelected(nodeId) {
+        if (!selectedId) return false;
+        return links.some(([a, b]) =>
+          (a === selectedId && b === nodeId) ||
+          (b === selectedId && a === nodeId)
+        );
+      }
+
+      function selectNode(id) {
+        if (!entered) return;
+
+        if (selectedId === id) {
+          clearSelection();
+          return;
+        }
+
+        selectedId = id;
+        const n = nodeMap.get(id);
+
+        panelTitle.textContent = n.title;
+        panelText.textContent = n.text;
+        panelChips.innerHTML = "";
+
+        n.chips.forEach(t => {
+          const chip = document.createElement("span");
+          chip.className = "chip";
+          chip.textContent = t;
+          panelChips.appendChild(chip);
+        });
+
+        panel.classList.add("show");
+        panel.setAttribute("aria-hidden", "false");
+      }
+
+      function clearSelection() {
+        selectedId = null;
+        panel.classList.remove("show");
+        panel.setAttribute("aria-hidden", "true");
+      }
+
+      function updateTargets() {
+        const now = performance.now();
+
+        nodes.forEach((n, i) => {
+          if (!entered) {
+            n.targetScale = 0.12;
+            n.targetOpacity = 0;
+            return;
+          }
+
+          // During entry, nodes bloom in at slightly different times.
+          if (!selectedId) {
+            const delay = 430 + i * 88;
+            const p = enterStartedAt
+              ? Math.max(0, Math.min(1, (now - enterStartedAt - delay) / 720))
+              : 1;
+            const eased = 1 - Math.pow(1 - p, 3);
+
+            n.targetScale = (0.12 + 0.88 * eased) * (n.hover && p > 0.8 ? 1.08 : 1);
+            n.targetOpacity = eased;
+            return;
+          }
+
+          if (n.id === selectedId) {
+            n.targetScale = 1.62;
+            n.targetOpacity = 1;
+          } else if (isLinkedToSelected(n.id)) {
+            n.targetScale = n.hover ? 1.02 : 0.95;
+            n.targetOpacity = n.hover ? 0.78 : 0.52;
+          } else {
+            n.targetScale = n.hover ? 0.94 : 0.84;
+            n.targetOpacity = n.hover ? 0.40 : 0.16;
+          }
+        });
+      }
+
+      function physics(dt, now) {
+        const frame = dt * 60;
+        const damping = Math.pow(0.865, frame);
+
+        // Soft anchors, intentionally not too strong.
+        for (const n of nodes) {
+          let tx = n.ax;
+          let ty = n.ay;
+
+          // Selected node gets pulled a little toward the center,
+          // while still preserving its own original region.
+          if (n.id === selectedId) {
+            tx = n.ax * 0.64 + center.x * 0.36;
+            ty = n.ay * 0.64 + center.y * 0.36;
+          }
+
+          const springStrength = n.id === selectedId ? 0.0058 : 0.0037;
+          n.vx += (tx - n.x) * springStrength * frame;
+          n.vy += (ty - n.y) * springStrength * frame;
+
+          if (!reducedMotion) {
+            const t = now / 1000;
+            const breath = 0.0025 + (1 - n.weight) * 0.0013;
+            n.vx += Math.sin(t * (0.50 + n.weight * 0.12) + n.phase) * breath * frame;
+            n.vy += Math.cos(t * (0.44 + n.weight * 0.10) + n.phase * 1.17) * breath * frame;
+          }
+        }
+
+        // Link springs with DIFFERENT desired lengths.
+        for (const [aId, bId, desired] of links) {
+          const a = getNode(aId);
+          const b = getNode(bId);
+
+          let dx = b.x - a.x;
+          let dy = b.y - a.y;
+          let dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          dx /= dist;
+          dy /= dist;
+
+          const delta = dist - desired;
+          const k = 0.00115 * frame;
+
+          if (aId !== "me") {
+            a.vx += dx * delta * k;
+            a.vy += dy * delta * k;
+          }
+          if (bId !== "me") {
+            b.vx -= dx * delta * k;
+            b.vy -= dy * delta * k;
+          }
+        }
+
+        // Irregular node repulsion.
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const a = nodes[i];
+            const b = nodes[j];
+
+            let dx = b.x - a.x;
+            let dy = b.y - a.y;
+            let dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+            dx /= dist;
+            dy /= dist;
+
+            const desired = a.r * a.scale + b.r * b.scale + 38 + (a.weight + b.weight) * 18;
+
+            if (dist < desired) {
+              const push = (desired - dist) * 0.0019 * frame;
+              a.vx -= dx * push;
+              a.vy -= dy * push;
+              b.vx += dx * push;
+              b.vy += dy * push;
+            }
+          }
+        }
+
+        // Repulsion from the center portrait.
+        for (const n of nodes) {
+          let dx = n.x - center.x;
+          let dy = n.y - center.y;
+          let dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+          dx /= dist;
+          dy /= dist;
+
+          const desired = center.r + n.r * n.scale + 58;
+
+          if (dist < desired && n.id !== selectedId) {
+            const push = (desired - dist) * 0.002 * frame;
+            n.vx += dx * push;
+            n.vy += dy * push;
+          }
+        }
+
+        // Selected node gets extra "presence" and pushes others away.
+        if (selectedId) {
+          const s = nodeMap.get(selectedId);
+
+          for (const n of nodes) {
+            if (n.id === selectedId) continue;
+
+            let dx = n.x - s.x;
+            let dy = n.y - s.y;
+            let dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+            dx /= dist;
+            dy /= dist;
+
+            const influence = s.r * 2.55 + n.r + 54;
+
+            if (dist < influence) {
+              const push = (influence - dist) * 0.0024 * frame;
+              n.vx += dx * push;
+              n.vy += dy * push;
+            }
+          }
+        }
+
+        for (const n of nodes) {
+          n.vx *= damping;
+          n.vy *= damping;
+
+          n.x += n.vx * frame;
+          n.y += n.vy * frame;
+
+          // soft bounding box
+          n.x = Math.max(95, Math.min(1105, n.x));
+          n.y = Math.max(78, Math.min(650, n.y));
+
+          const ease = 1 - Math.pow(0.001, dt);
+          n.scale += (n.targetScale - n.scale) * ease * 0.78;
+          n.opacity += (n.targetOpacity - n.opacity) * ease * 0.72;
+        }
+      }
+
+      function render() {
+        updateTargets();
+
+        for (const n of nodes) {
+          const el = nodeEls.get(n.id);
+          const selected = n.id === selectedId;
+
+          el.g.setAttribute(
+            "transform",
+            `translate(${n.x.toFixed(2)} ${n.y.toFixed(2)}) scale(${n.scale.toFixed(3)})`
+          );
+          el.g.style.opacity = n.opacity.toFixed(3);
+
+          el.c.setAttribute(
+            "stroke",
+            selected || n.hover ? "#163f73" : "#c7ced8"
+          );
+          el.c.setAttribute(
+            "stroke-width",
+            selected ? "2.5" : n.hover ? "2.0" : "1.4"
+          );
+
+          el.sub.style.opacity = selected ? "1" : n.hover ? ".9" : ".38";
+        }
+
+        edgeEls.forEach((edge, edgeIndex) => {
+          const aId = edge.dataset.a;
+          const bId = edge.dataset.b;
+
+          const a = getNode(aId);
+          const b = getNode(bId);
+
+          const now = performance.now();
+          const revealStart = enterStartedAt + 250 + edgeIndex * 55;
+          const reveal = entered
+            ? Math.max(0, Math.min(1, (now - revealStart) / 520))
+            : 0;
+
+          edge.setAttribute("x1", a.x);
+          edge.setAttribute("y1", a.y);
+          edge.setAttribute("x2", a.x + (b.x - a.x) * reveal);
+          edge.setAttribute("y2", a.y + (b.y - a.y) * reveal);
+
+          if (!selectedId) {
+            const peripheral = aId !== "me" && bId !== "me";
+            edge.style.opacity = peripheral ? "0.38" : "0.62";
+            edge.setAttribute("stroke", "#cbd2dc");
+            edge.setAttribute("stroke-width", peripheral ? "1.15" : "1.45");
+          } else {
+            const touchesSelected = aId === selectedId || bId === selectedId;
+            const neighborLink =
+              (aId === "me" && bId === selectedId) ||
+              (bId === "me" && aId === selectedId);
+
+            if (touchesSelected || neighborLink) {
+              edge.style.opacity = "0.88";
+              edge.setAttribute("stroke", "#163f73");
+              edge.setAttribute("stroke-width", "2.2");
+            } else {
+              edge.style.opacity = "0.07";
+              edge.setAttribute("stroke", "#cbd2dc");
+              edge.setAttribute("stroke-width", "1.1");
+            }
+          }
+        });
+      }
+
+      function frame(now) {
+        const dt = Math.min((now - last) / 1000, 0.034);
+        last = now;
+
+        physics(dt, now);
+        render();
+        requestAnimationFrame(frame);
+      }
+
+
+      function enterGraph() {
+        if (entered) return;
+        entered = true;
+        enterStartedAt = performance.now();
+        stage.classList.add("entered");
+        introOverlay.classList.add("exit");
+
+        // Give the graph a small impulse so the first reveal feels alive.
+        nodes.forEach((n, i) => {
+          n.vx += Math.sin(i * 1.73) * 0.42;
+          n.vy += Math.cos(i * 1.31) * 0.36;
+        });
+      }
+
+      enterButton.addEventListener("click", enterGraph);
+
+      svg.addEventListener("click", (e) => {
+        if (!e.target.closest(".node")) clearSelection();
+      });
+
+      closeBtn.addEventListener("click", clearSelection);
+      fakeLink.addEventListener("click", (e) => e.preventDefault());
+
+      render();
+      requestAnimationFrame(frame);
+    })();
+  </script>
+</body>
+</html>
