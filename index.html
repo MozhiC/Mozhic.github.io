@@ -7,12 +7,12 @@
 
   <style>
     :root {
-      --bg: #f7f8fb;
-      --text: #0c162d;
-      --muted: #6f7786;
-      --line: #cbd2dc;
+      --bg: #eef2f7;
+      --text: #09152b;
+      --muted: #596475;
+      --line: #aeb8c6;
       --accent: #163f73;
-      --accent-soft: #eaf0f7;
+      --accent-soft: #dfe8f2;
       --panel: rgba(255,255,255,.88);
       --shadow: 0 24px 80px rgba(25,42,70,.12);
     }
@@ -24,8 +24,8 @@
       min-height: 100%;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at 47% 38%, rgba(22,63,115,.065), transparent 33rem),
-        linear-gradient(180deg, #fcfdff 0%, var(--bg) 100%);
+        radial-gradient(circle at 47% 38%, rgba(22,63,115,.10), transparent 34rem),
+        linear-gradient(180deg, #f5f7fa 0%, var(--bg) 100%);
       color: var(--text);
     }
 
@@ -34,7 +34,7 @@
     .shell {
       width: min(1240px, calc(100% - 28px));
       margin: 0 auto;
-      padding: 18px 0 40px;
+      padding: 0 0 40px;
     }
 
     .topbar {
@@ -74,12 +74,8 @@
 
     .stage {
       position: relative;
-      border: 1px solid rgba(203,210,220,.72);
-      border-radius: 32px;
       overflow: hidden;
-      background: rgba(255,255,255,.52);
-      backdrop-filter: blur(12px);
-      box-shadow: var(--shadow);
+      background: transparent;
     }
 
     svg {
@@ -102,9 +98,9 @@
     }
 
     .node circle {
-      fill: rgba(255,255,255,.98);
-      stroke: #c7ced8;
-      stroke-width: 1.4;
+      fill: rgba(248,250,253,.98);
+      stroke: #aab5c3;
+      stroke-width: 2.15;
     }
 
     .node text {
@@ -114,18 +110,19 @@
 
     .node .label {
       fill: var(--text);
-      font-weight: 800;
-      letter-spacing: .07em;
+      font-weight: 900;
+      letter-spacing: .055em;
     }
 
     .node .sub {
       fill: var(--muted);
+      font-weight: 650;
     }
 
     .center .ring {
       fill: #fff;
       stroke: var(--accent);
-      stroke-width: 2.5;
+      stroke-width: 3.2;
       filter: drop-shadow(0 16px 28px rgba(22,63,115,.15));
     }
 
@@ -133,15 +130,15 @@
 
     .center .initials {
       fill: var(--accent);
-      font-weight: 800;
-      font-size: 31px;
+      font-weight: 900;
+      font-size: 32px;
       text-anchor: middle;
     }
 
     .center .name {
       fill: var(--text);
       font-size: 21px;
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing: -0.03em;
       text-anchor: middle;
     }
@@ -149,6 +146,7 @@
     .center .role {
       fill: var(--muted);
       font-size: 12px;
+      font-weight: 650;
       text-anchor: middle;
     }
 
@@ -183,8 +181,8 @@
     .eyebrow {
       color: var(--accent);
       font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .13em;
+      font-weight: 900;
+      letter-spacing: .12em;
       text-transform: uppercase;
       margin-bottom: 8px;
     }
@@ -194,6 +192,7 @@
       font-size: 34px;
       line-height: 1;
       letter-spacing: -0.04em;
+      font-weight: 900;
     }
 
     .panel p {
@@ -242,21 +241,6 @@
       border-radius: 10px;
     }
 
-    .note {
-      position: absolute;
-      left: 24px;
-      bottom: 24px;
-      max-width: 275px;
-      padding: 11px 13px;
-      border-radius: 14px;
-      border: 1px solid rgba(203,210,220,.58);
-      background: rgba(255,255,255,.55);
-      backdrop-filter: blur(10px);
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
 
     .intro-overlay {
       position: absolute;
@@ -265,8 +249,7 @@
       display: grid;
       place-items: center;
       background:
-        radial-gradient(circle at 50% 48%, rgba(22,63,115,.075), transparent 27rem),
-        rgba(251,252,254,.97);
+        radial-gradient(circle at 50% 48%, rgba(22,63,115,.075), transparent 27rem);
       transition: opacity .9s cubic-bezier(.22,.8,.2,1), visibility .9s ease;
     }
 
@@ -302,7 +285,7 @@
       margin-bottom: 14px;
       color: var(--muted);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: .18em;
       text-transform: uppercase;
     }
@@ -312,7 +295,7 @@
       font-size: clamp(42px, 7vw, 92px);
       line-height: .94;
       letter-spacing: -0.065em;
-      font-weight: 820;
+      font-weight: 900;
     }
 
     .enter-title em {
@@ -376,23 +359,14 @@
         bottom: 18px;
         width: auto;
       }
-
-      .note {
-        left: 18px;
-        bottom: 18px;
-        max-width: 220px;
-      }
     }
 
     @media (max-width: 560px) {
       .shell {
         width: calc(100% - 16px);
-        padding-top: 8px;
       }
 
-      .stage { border-radius: 23px; }
       svg { height: 610px; }
-      .note { display: none; }
       .panel h2 { font-size: 29px; }
     }
 
@@ -404,14 +378,6 @@
 
 <body>
   <main class="shell">
-    <header class="topbar">
-      <a class="brand" href="#">
-        <span class="brand-dot">MC</span>
-        <span>Mozhi Chen</span>
-      </a>
-      <div class="hint">Organic force graph • click a node to focus</div>
-    </header>
-
     <section class="stage" id="stage">
       <div class="intro-overlay" id="introOverlay">
         <button class="enter-button" id="enterButton" type="button" aria-label="Enter Mozhi's Power Grid">
@@ -448,10 +414,6 @@
 
         <g id="nodes"></g>
       </svg>
-
-      <div class="note">
-        这版不再是规则星形。节点有不同权重、不同尺寸、不同 link 长度，也有外围节点之间的连接，所以整体更像真正的 graph。
-      </div>
 
       <aside class="panel" id="panel" aria-hidden="true">
         <div class="eyebrow">Selected node</div>
@@ -565,26 +527,6 @@
           title: "Contact",
           text: "Email, Google Scholar, GitHub and LinkedIn.",
           chips: ["Email", "Scholar", "GitHub"]
-        },
-        {
-          id: "graph",
-          label: "GRAPH",
-          sub: "Learning",
-          weight: 0.29,
-          ax: 520, ay: 88,
-          title: "Graph learning",
-          text: "A smaller thematic node that hints at deeper graph navigation.",
-          chips: ["Topology", "GNN", "Networks"]
-        },
-        {
-          id: "llm",
-          label: "LLM × ENERGY",
-          sub: "Modeling",
-          weight: 0.34,
-          ax: 870, ay: 350,
-          title: "LLM × Energy",
-          text: "A smaller thematic node connected to research and projects.",
-          chips: ["LLM", "Time series", "Energy"]
         }
       ];
 
@@ -598,12 +540,9 @@
         ["me", "cv", 300],
         ["me", "contact", 355],
         ["me", "news", 330],
-        ["research", "graph", 145],
-        ["research", "llm", 210],
         ["research", "projects", 245],
         ["papers", "research", 250],
         ["papers", "news", 215],
-        ["projects", "llm", 260],
         ["cv", "contact", 230]
       ];
 
@@ -950,11 +889,11 @@
 
           el.c.setAttribute(
             "stroke",
-            selected || n.hover ? "#163f73" : "#c7ced8"
+            selected || n.hover ? "#163f73" : "#aab5c3"
           );
           el.c.setAttribute(
             "stroke-width",
-            selected ? "2.5" : n.hover ? "2.0" : "1.4"
+            selected ? "3.2" : n.hover ? "2.7" : "2.15"
           );
 
           el.sub.style.opacity = selected ? "1" : n.hover ? ".9" : ".38";
@@ -980,9 +919,9 @@
 
           if (!selectedId) {
             const peripheral = aId !== "me" && bId !== "me";
-            edge.style.opacity = peripheral ? "0.38" : "0.62";
+            edge.style.opacity = peripheral ? "0.55" : "0.78";
             edge.setAttribute("stroke", "#cbd2dc");
-            edge.setAttribute("stroke-width", peripheral ? "1.15" : "1.45");
+            edge.setAttribute("stroke-width", peripheral ? "1.7" : "2.05");
           } else {
             const touchesSelected = aId === selectedId || bId === selectedId;
             const neighborLink =
@@ -990,13 +929,13 @@
               (bId === "me" && aId === selectedId);
 
             if (touchesSelected || neighborLink) {
-              edge.style.opacity = "0.88";
+              edge.style.opacity = "0.96";
               edge.setAttribute("stroke", "#163f73");
-              edge.setAttribute("stroke-width", "2.2");
+              edge.setAttribute("stroke-width", "2.8");
             } else {
-              edge.style.opacity = "0.07";
+              edge.style.opacity = "0.14";
               edge.setAttribute("stroke", "#cbd2dc");
-              edge.setAttribute("stroke-width", "1.1");
+              edge.setAttribute("stroke-width", "1.45");
             }
           }
         });
