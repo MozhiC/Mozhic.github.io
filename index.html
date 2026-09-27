@@ -375,6 +375,120 @@
       font-weight: 600;
     }
 
+    .life-gate {
+      margin-top: 12px;
+    }
+
+    .life-gate[hidden] {
+      display: none !important;
+    }
+
+    .life-photo-wrap {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 180px;
+      border-radius: 18px;
+      border: 1px solid rgba(148,165,185,.58);
+      background:
+        linear-gradient(135deg, rgba(214,228,243,.95), rgba(240,244,249,.98));
+      margin-bottom: 16px;
+    }
+
+    .life-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .life-photo-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #6c7d91;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .life-question {
+      margin: 0;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.45;
+      font-weight: 850;
+    }
+
+    .life-hint {
+      margin-top: 6px;
+      color: #657287;
+      font-size: 12px;
+      line-height: 1.5;
+      font-weight: 650;
+      font-style: italic;
+    }
+
+    .life-form {
+      display: flex;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .life-input {
+      min-width: 0;
+      flex: 1;
+      border: 1px solid #aebdce;
+      border-radius: 12px;
+      background: rgba(255,255,255,.82);
+      color: var(--text);
+      padding: 11px 12px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .life-input:focus {
+      border-color: #56799f;
+      box-shadow: 0 0 0 3px rgba(22,63,115,.08);
+    }
+
+    .life-submit {
+      border: 1px solid #244c7d;
+      border-radius: 12px;
+      background: #163f73;
+      color: white;
+      padding: 0 15px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .life-submit:hover {
+      background: #0f335f;
+    }
+
+    .life-feedback {
+      min-height: 18px;
+      margin-top: 9px;
+      color: #6a7585;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .life-feedback.ok {
+      color: #285d47;
+    }
+
+    .life-feedback.bad {
+      color: #8a4d45;
+    }
+
     .chip {
       padding: 7px 10px;
       border-radius: 999px;
@@ -637,6 +751,35 @@
           </div>
         </div>
 
+        <div class="life-gate" id="lifeGate" hidden>
+          <div class="life-photo-wrap">
+            <img
+              class="life-photo"
+              id="lifePhoto"
+              src="assets/sana.jpg"
+              alt="My favorite idol"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
+            />
+            <div class="life-photo-fallback" style="display:none;">Add assets/sana.jpg</div>
+          </div>
+
+          <p class="life-question">This is my favorite idol. What’s her name?</p>
+          <div class="life-hint">Hint: I will make you remember — she is Sana.</div>
+
+          <form class="life-form" id="lifeForm" autocomplete="off">
+            <input
+              class="life-input"
+              id="lifeAnswer"
+              type="text"
+              placeholder="Type her name..."
+              aria-label="Favorite idol name"
+            />
+            <button class="life-submit" type="submit">Submit</button>
+          </form>
+
+          <div class="life-feedback" id="lifeFeedback" aria-live="polite"></div>
+        </div>
+
         <div class="chips" id="panelChips"></div>
         <div class="panel-foot">
           <a href="#" id="fakeLink">Explore section ↗</a>
@@ -667,6 +810,10 @@
       const panelChips = document.getElementById("panelChips");
       const contactList = document.getElementById("contactList");
       const cvList = document.getElementById("cvList");
+      const lifeGate = document.getElementById("lifeGate");
+      const lifeForm = document.getElementById("lifeForm");
+      const lifeAnswer = document.getElementById("lifeAnswer");
+      const lifeFeedback = document.getElementById("lifeFeedback");
       const closeBtn = document.getElementById("closeBtn");
       const fakeLink = document.getElementById("fakeLink");
 
@@ -748,8 +895,8 @@
           weight: 0.46,
           ax: 585, ay: 655,
           title: "Life",
-          text: "A more personal space for photos, travel, hobbies, memorable moments and everyday life beyond research.",
-          chips: ["Photos", "Travel", "Hobbies", "Moments"]
+          text: "",
+          chips: []
         },
         {
           id: "contact",
@@ -1056,6 +1203,14 @@
         // Dedicated card content must only appear for its matching node.
         contactList.hidden = n.id !== "contact";
         cvList.hidden = n.id !== "cv";
+        lifeGate.hidden = n.id !== "life";
+
+        if (n.id === "life") {
+          lifeAnswer.value = "";
+          lifeFeedback.textContent = "";
+          lifeFeedback.className = "life-feedback";
+          requestAnimationFrame(() => lifeAnswer.focus());
+        }
 
         // Research expands directly inside the graph instead of opening a text card.
         if (n.id === "research") {
@@ -1075,7 +1230,7 @@
           panelChips.appendChild(chip);
         });
 
-        if (n.id === "about" || n.id === "contact" || n.id === "news") {
+        if (n.id === "about" || n.id === "contact" || n.id === "news" || n.id === "life") {
           fakeLink.removeAttribute("target");
           fakeLink.removeAttribute("rel");
           fakeLink.style.display = "none";
@@ -1119,6 +1274,7 @@
         selectedId = null;
         contactList.hidden = true;
         cvList.hidden = true;
+        lifeGate.hidden = true;
         panel.classList.remove("show");
         panel.setAttribute("aria-hidden", "true");
       }
@@ -1472,6 +1628,24 @@
       fakeLink.addEventListener("click", (e) => {
         if (fakeLink.dataset.activeLink !== "true") {
           e.preventDefault();
+        }
+      });
+
+      lifeForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const answer = lifeAnswer.value.trim().toLowerCase();
+
+        if (answer === "sana") {
+          lifeFeedback.textContent = "Correct. Welcome in ✦";
+          lifeFeedback.className = "life-feedback ok";
+          setTimeout(() => {
+            window.location.href = "life.html";
+          }, 550);
+        } else {
+          lifeFeedback.textContent = "Not quite — try again :)";
+          lifeFeedback.className = "life-feedback bad";
+          lifeAnswer.select();
         }
       });
 
