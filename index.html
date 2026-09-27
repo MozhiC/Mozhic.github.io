@@ -146,6 +146,40 @@
       pointer-events: none;
     }
 
+
+    .life-node circle {
+      fill: rgba(240, 228, 245, .98);
+      stroke: #a07db0;
+      stroke-width: 2.8;
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: lifePulse 4.2s ease-in-out infinite;
+    }
+
+    .life-node .label {
+      fill: #533265;
+    }
+
+    .life-node .sub {
+      fill: #856f91;
+      font-style: italic;
+    }
+
+    @keyframes lifePulse {
+      0%, 100% {
+        filter: drop-shadow(0 7px 12px rgba(98,59,121,.08));
+      }
+      50% {
+        filter: drop-shadow(0 12px 22px rgba(98,59,121,.20));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .life-node circle {
+        animation: none;
+      }
+    }
+
     .edge {
       stroke: var(--line);
       stroke-linecap: round;
@@ -187,6 +221,46 @@
     .node:hover circle {
       fill: rgba(194, 214, 238, 0.98);
       filter: drop-shadow(0 10px 16px rgba(22,63,115,.10));
+    }
+
+    /* LIFE is intentionally different from the academic nodes. */
+    .node.life-node circle {
+      fill: #ead5f0;
+      stroke: #9a63ad;
+      stroke-width: 3;
+      filter: drop-shadow(0 10px 18px rgba(122,70,145,.18));
+      animation: lifePulseStrong 4.2s ease-in-out infinite;
+    }
+
+    .node.life-node:hover circle {
+      fill: #e2c3ec;
+      stroke: #7e4b93;
+      filter: drop-shadow(0 13px 23px rgba(122,70,145,.28));
+    }
+
+    .node.life-node .label {
+      fill: #542d66;
+    }
+
+    .node.life-node .sub {
+      fill: #80698b;
+      font-style: italic;
+      opacity: .72 !important;
+    }
+
+    @keyframes lifePulseStrong {
+      0%, 100% {
+        filter: drop-shadow(0 9px 16px rgba(122,70,145,.13));
+      }
+      50% {
+        filter: drop-shadow(0 13px 25px rgba(122,70,145,.27));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .node.life-node circle {
+        animation: none;
+      }
     }
 
     .center .ring {
@@ -235,7 +309,7 @@
       position: absolute;
       right: 28px;
       bottom: 28px;
-      width: min(470px, calc(100% - 56px));
+      width: min(500px, calc(100% - 56px));
       padding: 22px;
       border-radius: 22px;
       background: var(--panel);
@@ -424,12 +498,44 @@
     }
 
     .life-hint {
-      margin-top: 6px;
+      display: flex;
+      align-items: baseline;
+      flex-wrap: nowrap;
+      gap: 7px;
+      margin-top: 8px;
       color: #657287;
       font-size: 12px;
-      line-height: 1.5;
+      line-height: 1;
       font-weight: 650;
       font-style: italic;
+      white-space: nowrap;
+    }
+
+    .hint-small {
+      display: inline;
+    }
+
+    .hint-big {
+      display: inline-block;
+      color: #c23c76;
+      font-size: 31px;
+      line-height: .85;
+      font-weight: 950;
+      letter-spacing: .075em;
+      font-style: normal;
+      text-transform: uppercase;
+      transform: translateY(3px) rotate(-2deg);
+    }
+
+    @media (max-width: 560px) {
+      .life-hint {
+        gap: 5px;
+        font-size: 10.5px;
+      }
+
+      .hint-big {
+        font-size: 25px;
+      }
     }
 
     .life-form {
@@ -764,7 +870,10 @@
           </div>
 
           <p class="life-question">This is my favorite idol. What’s her name?</p>
-          <div class="life-hint">Hint: I will make you remember — she is Sana.</div>
+          <div class="life-hint">
+            <span class="hint-small">Hint: I will make you remember — she is</span>
+            <span class="hint-big">SANA</span>
+          </div>
 
           <form class="life-form" id="lifeForm" autocomplete="off">
             <input
@@ -890,9 +999,9 @@
 
         {
           id: "life",
-          label: "LIFE",
-          sub: "Beyond research",
-          weight: 0.46,
+          label: "LIFE ✦",
+          sub: "not everything is research",
+          weight: 0.92,
           ax: 585, ay: 655,
           title: "Life",
           text: "",
@@ -1133,7 +1242,7 @@
 
       nodes.forEach(node => {
         const g = make("g", {
-          class: "node",
+          class: node.id === "life" ? "node life-node" : "node",
           tabindex: "0",
           role: "button",
           "aria-label": `Open ${node.title}`
@@ -1532,21 +1641,28 @@
           );
           el.g.style.opacity = n.opacity.toFixed(3);
 
-          el.c.setAttribute(
-            "stroke",
-            selected || n.hover ? "#163f73" : "#94a5b9"
-          );
-          el.c.setAttribute(
-            "stroke-width",
-            selected ? "3.2" : n.hover ? "2.7" : "2.25"
-          );
+          if (n.id === "life") {
+            el.c.style.stroke = selected || n.hover ? "#7e4b93" : "#9a63ad";
+            el.c.style.strokeWidth = selected ? "3.5px" : n.hover ? "3.2px" : "3px";
 
-          if (selected) {
-            el.c.setAttribute("fill", "rgba(180, 205, 235, 0.98)");
-          } else if (n.hover) {
-            el.c.setAttribute("fill", "rgba(194, 214, 238, 0.98)");
+            if (selected) {
+              el.c.style.fill = "#dcb8e8";
+            } else if (n.hover) {
+              el.c.style.fill = "#e2c3ec";
+            } else {
+              el.c.style.fill = "#ead5f0";
+            }
           } else {
-            el.c.setAttribute("fill", "rgba(210, 224, 241, 0.96)");
+            el.c.style.stroke = selected || n.hover ? "#163f73" : "#94a5b9";
+            el.c.style.strokeWidth = selected ? "3.2px" : n.hover ? "2.7px" : "2.25px";
+
+            if (selected) {
+              el.c.style.fill = "rgba(180, 205, 235, 0.98)";
+            } else if (n.hover) {
+              el.c.style.fill = "rgba(194, 214, 238, 0.98)";
+            } else {
+              el.c.style.fill = "rgba(210, 224, 241, 0.96)";
+            }
           }
 
           el.sub.style.opacity = selected ? "1" : n.hover ? ".9" : ".38";
