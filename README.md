@@ -1,8 +1,7 @@
 # Mozhi Chen Personal Website
 
-Thanks to GPT XD, I generate my ideal website.
+Welcome to my personal website — built with a little help from GPT XD.
 
-You will know what my research are when you enter it :)
+It is an interactive graph rather than a traditional homepage.
 
-
-assets/profile.jpg
+Explore the site to learn more about my research, publications, projects, and a few things outside research as well :)
