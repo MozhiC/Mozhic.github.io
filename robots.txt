@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mozhic.github.io/sitemap.xml
