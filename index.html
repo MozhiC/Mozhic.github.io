@@ -164,29 +164,28 @@
 
 
     .life-node circle {
-      fill: rgba(240, 228, 245, .98);
-      stroke: #a07db0;
-      stroke-width: 2.8;
+      fill: rgba(210, 224, 241, 0.96);
+      stroke: #94a5b9;
       transform-box: fill-box;
       transform-origin: center;
       animation: lifePulse 4.2s ease-in-out infinite;
     }
 
     .life-node .label {
-      fill: #533265;
+      fill: var(--text);
     }
 
     .life-node .sub {
-      fill: #856f91;
+      fill: var(--muted);
       font-style: italic;
     }
 
     @keyframes lifePulse {
       0%, 100% {
-        filter: drop-shadow(0 7px 12px rgba(98,59,121,.08));
+        filter: drop-shadow(0 7px 12px rgba(22,63,115,.055));
       }
       50% {
-        filter: drop-shadow(0 12px 22px rgba(98,59,121,.20));
+        filter: drop-shadow(0 11px 20px rgba(22,63,115,.13));
       }
     }
 
@@ -239,37 +238,37 @@
       filter: drop-shadow(0 10px 16px rgba(22,63,115,.10));
     }
 
-    /* LIFE is intentionally different from the academic nodes. */
+    /* LIFE keeps its larger size / subtle pulse, but uses the same palette as the other main nodes. */
     .node.life-node circle {
-      fill: #ead5f0;
-      stroke: #9a63ad;
-      stroke-width: 3;
-      filter: drop-shadow(0 10px 18px rgba(122,70,145,.18));
+      fill: rgba(210, 224, 241, 0.96);
+      stroke: #94a5b9;
+      stroke-width: 2.25;
+      filter: drop-shadow(0 7px 12px rgba(22,63,115,.055));
       animation: lifePulseStrong 4.2s ease-in-out infinite;
     }
 
     .node.life-node:hover circle {
-      fill: #e2c3ec;
-      stroke: #7e4b93;
-      filter: drop-shadow(0 13px 23px rgba(122,70,145,.28));
+      fill: rgba(194, 214, 238, 0.98);
+      stroke: #163f73;
+      filter: drop-shadow(0 10px 16px rgba(22,63,115,.10));
     }
 
     .node.life-node .label {
-      fill: #542d66;
+      fill: var(--text);
     }
 
     .node.life-node .sub {
-      fill: #80698b;
+      fill: var(--muted);
       font-style: italic;
       opacity: .72 !important;
     }
 
     @keyframes lifePulseStrong {
       0%, 100% {
-        filter: drop-shadow(0 9px 16px rgba(122,70,145,.13));
+        filter: drop-shadow(0 7px 12px rgba(22,63,115,.055));
       }
       50% {
-        filter: drop-shadow(0 13px 25px rgba(122,70,145,.27));
+        filter: drop-shadow(0 11px 20px rgba(22,63,115,.13));
       }
     }
 
@@ -1724,28 +1723,15 @@
           );
           el.g.style.opacity = n.opacity.toFixed(3);
 
-          if (n.id === "life") {
-            el.c.style.stroke = selected || n.hover ? "#7e4b93" : "#9a63ad";
-            el.c.style.strokeWidth = selected ? "3.5px" : n.hover ? "3.2px" : "3px";
+          el.c.style.stroke = selected || n.hover ? "#163f73" : "#94a5b9";
+          el.c.style.strokeWidth = selected ? "3.2px" : n.hover ? "2.7px" : "2.25px";
 
-            if (selected) {
-              el.c.style.fill = "#dcb8e8";
-            } else if (n.hover) {
-              el.c.style.fill = "#e2c3ec";
-            } else {
-              el.c.style.fill = "#ead5f0";
-            }
+          if (selected) {
+            el.c.style.fill = "rgba(180, 205, 235, 0.98)";
+          } else if (n.hover) {
+            el.c.style.fill = "rgba(194, 214, 238, 0.98)";
           } else {
-            el.c.style.stroke = selected || n.hover ? "#163f73" : "#94a5b9";
-            el.c.style.strokeWidth = selected ? "3.2px" : n.hover ? "2.7px" : "2.25px";
-
-            if (selected) {
-              el.c.style.fill = "rgba(180, 205, 235, 0.98)";
-            } else if (n.hover) {
-              el.c.style.fill = "rgba(194, 214, 238, 0.98)";
-            } else {
-              el.c.style.fill = "rgba(210, 224, 241, 0.96)";
-            }
+            el.c.style.fill = "rgba(210, 224, 241, 0.96)";
           }
 
           el.sub.style.opacity = selected ? "1" : n.hover ? ".9" : ".38";
