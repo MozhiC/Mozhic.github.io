@@ -285,6 +285,45 @@
       gap: 8px;
     }
 
+    .contact-list {
+      display: grid;
+      gap: 11px;
+      margin: 16px 0 4px;
+    }
+
+    .contact-item {
+      display: grid;
+      grid-template-columns: 84px minmax(0, 1fr);
+      gap: 12px;
+      align-items: baseline;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(148,165,185,.32);
+    }
+
+    .contact-item:last-child {
+      border-bottom: 0;
+    }
+
+    .contact-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .contact-value {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .contact-value:hover {
+      color: var(--accent);
+    }
+
     .chip {
       padding: 7px 10px;
       border-radius: 999px;
@@ -501,6 +540,20 @@
         <div class="eyebrow">Selected node</div>
         <h2 id="panelTitle"></h2>
         <p id="panelText"></p>
+        <div class="contact-list" id="contactList" hidden>
+          <div class="contact-item">
+            <div class="contact-label">Email</div>
+            <a class="contact-value" href="mailto:mchen08@villanova.edu">mchen08@villanova.edu</a>
+          </div>
+          <div class="contact-item">
+            <div class="contact-label">US</div>
+            <a class="contact-value" href="tel:+12675197727">+1 (267) 519-7727</a>
+          </div>
+          <div class="contact-item">
+            <div class="contact-label">China</div>
+            <a class="contact-value" href="tel:+8618096637960">+86 180 9663 7960</a>
+          </div>
+        </div>
         <div class="chips" id="panelChips"></div>
         <div class="panel-foot">
           <a href="#" id="fakeLink">Explore section ↗</a>
@@ -529,6 +582,7 @@
       const panelTitle = document.getElementById("panelTitle");
       const panelText = document.getElementById("panelText");
       const panelChips = document.getElementById("panelChips");
+      const contactList = document.getElementById("contactList");
       const closeBtn = document.getElementById("closeBtn");
       const fakeLink = document.getElementById("fakeLink");
 
@@ -589,8 +643,8 @@
           weight: 0.49,
           ax: 1080, ay: 235,
           title: "News",
-          text: "Awards, conference presentations and academic milestones.",
-          chips: ["Awards", "Talks", "Updates"]
+          text: "SolarDisagg-LLM received a Best Paper Award at the 2026 IEEE Power & Energy Society General Meeting.",
+          chips: ["Best Paper Award", "IEEE PESGM 2026"]
         },
         {
           id: "cv",
@@ -599,8 +653,8 @@
           weight: 0.44,
           ax: 830, ay: 635,
           title: "CV",
-          text: "Education, experience and a link to the full PDF CV.",
-          chips: ["Education", "Experience", "PDF"]
+          text: "A concise overview of my academic background, research experience, publications, teaching, awards, and professional activities.",
+          chips: ["Education", "Research", "Publications", "Teaching"]
         },
 
         {
@@ -620,8 +674,8 @@
           weight: 0.37,
           ax: 1090, ay: 525,
           title: "Contact",
-          text: "Email, Google Scholar, GitHub and LinkedIn.",
-          chips: ["Email", "Scholar", "GitHub"]
+          text: "",
+          chips: []
         }
       ];
 
@@ -933,21 +987,38 @@
           panelChips.appendChild(chip);
         });
 
-        if (n.id === "about") {
+        contactList.hidden = n.id !== "contact";
+
+        if (n.id === "about" || n.id === "contact" || n.id === "news") {
+          fakeLink.removeAttribute("target");
+          fakeLink.removeAttribute("rel");
           fakeLink.style.display = "none";
           fakeLink.removeAttribute("href");
           fakeLink.dataset.activeLink = "false";
         } else if (n.id === "papers") {
+          fakeLink.removeAttribute("target");
+          fakeLink.removeAttribute("rel");
           fakeLink.style.display = "";
           fakeLink.textContent = "View all publications ↗";
           fakeLink.setAttribute("href", "papers.html");
           fakeLink.dataset.activeLink = "true";
         } else if (n.id === "projects") {
+          fakeLink.removeAttribute("target");
+          fakeLink.removeAttribute("rel");
           fakeLink.style.display = "";
           fakeLink.textContent = "View projects ↗";
           fakeLink.setAttribute("href", "projects.html");
           fakeLink.dataset.activeLink = "true";
+        } else if (n.id === "cv") {
+          fakeLink.style.display = "";
+          fakeLink.textContent = "View CV ↗";
+          fakeLink.setAttribute("href", "assets/Mozhi_Chen_CV.pdf");
+          fakeLink.setAttribute("target", "_blank");
+          fakeLink.setAttribute("rel", "noopener");
+          fakeLink.dataset.activeLink = "true";
         } else {
+          fakeLink.removeAttribute("target");
+          fakeLink.removeAttribute("rel");
           fakeLink.style.display = "";
           fakeLink.textContent = "Explore section ↗";
           fakeLink.setAttribute("href", "#");
@@ -960,6 +1031,7 @@
 
       function clearSelection() {
         selectedId = null;
+        contactList.hidden = true;
         panel.classList.remove("show");
         panel.setAttribute("aria-hidden", "true");
       }

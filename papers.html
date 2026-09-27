@@ -207,6 +207,35 @@
       border: 1px solid rgba(55,83,111,.15);
     }
 
+    .award {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      color: #7a5410;
+      background: #f6e8bd;
+      border: 1px solid rgba(122,84,16,.18);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .award::before {
+      content: "★";
+      font-size: 10px;
+    }
+
+    .paper-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 7px;
+      flex: 0 0 auto;
+    }
+
     .authors {
       margin-top: 10px;
       color: #34445a;
@@ -257,6 +286,10 @@
         align-self: flex-start;
       }
 
+      .paper-badges {
+        justify-content: flex-start;
+      }
+
       .hero p {
         font-size: 15px;
       }
@@ -288,7 +321,7 @@
       <div class="year-heading"><h2>2026</h2></div>
 
       <div class="paper-list">
-        <article class="paper">
+<article class="paper">
           <div class="paper-top">
             <h3>GridGraph-LLM: Graph-Aware Large Language Models for Contingency Analysis and Transmission Line Failure Localization</h3>
             <span class="status published">Published</span>
@@ -296,15 +329,7 @@
           <div class="venue"><strong>Applied Energy</strong> · 2026</div>
         </article>
 
-        <article class="paper">
-          <div class="paper-top">
-            <h3>Learning Transmission Outages with Electrical Distance Reconstructed High-Order Topological Graph Convolutional Networks</h3>
-            <span class="status review">Under Review</span>
-          </div>
-          <div class="venue"><strong>IEEE Transactions on Power Systems</strong> · 2026</div>
-        </article>
-
-        <article class="paper">
+<article class="paper">
           <div class="paper-top">
             <h3>AI-Assisted Stack Break-in for Accelerated Manufacturing of Hydrogen Fuel Cells</h3>
             <span class="status published">Published</span>
@@ -312,7 +337,18 @@
           <div class="venue"><strong>IEEE Journal of Emerging and Selected Topics in Power Electronics</strong> · 2026</div>
         </article>
 
-        <article class="paper">
+<article class="paper">
+          <div class="paper-top">
+            <h3>SolarDisagg-LLM: Leveraging Time Series Reprogramming of Large Language Models for Solar Disaggregation</h3>
+            <div class="paper-badges">
+              <span class="award">Best Paper Award</span>
+              <span class="status accepted">Accepted</span>
+            </div>
+          </div>
+          <div class="venue"><strong>IEEE Power &amp; Energy Society General Meeting</strong> · 2026</div>
+        </article>
+
+<article class="paper">
           <div class="paper-top">
             <h3>Data-Driven Graph Learning for Transmission Network Partitioning under N-1 Contingencies</h3>
             <span class="status accepted">Accepted</span>
@@ -320,12 +356,12 @@
           <div class="venue"><strong>IEEE Power &amp; Energy Society General Meeting</strong> · 2026</div>
         </article>
 
-        <article class="paper">
+<article class="paper">
           <div class="paper-top">
-            <h3>SolarDisagg-LLM: Leveraging Time Series Reprogramming of Large Language Models for Solar Disaggregation</h3>
-            <span class="status accepted">Accepted</span>
+            <h3>Learning Transmission Outages with Electrical Distance Reconstructed High-Order Topological Graph Convolutional Networks</h3>
+            <span class="status review">Under Review</span>
           </div>
-          <div class="venue"><strong>IEEE Power &amp; Energy Society General Meeting</strong> · 2026</div>
+          <div class="venue"><strong>IEEE Transactions on Power Systems</strong> · 2026</div>
         </article>
       </div>
     </section>
