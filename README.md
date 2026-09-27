@@ -1,6 +1,6 @@
-# Mozhi Chen
+# Mozhi Chen Personal Website
 
-Thanks to OpenAI and GPT, I generate my ideal website.
+Thanks to GPT XD, I generate my ideal website.
 
 You will know what my research are when you enter it :)
 
