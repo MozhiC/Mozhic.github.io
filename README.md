@@ -1,13 +1,8 @@
-# Organic Graph Personal Site — V9
+# Mozhi Chen
 
-Visual density update:
-- Heavier typography throughout.
-- Thicker node outlines.
-- Thicker and darker graph edges.
-- Stronger selected-node outlines.
-- Slightly darker gray-blue page background.
-- Nodes are softly off-white rather than pure white.
-- Overall composition feels denser and less washed out.
+Thanks to OpenAI and GPT, I generate my ideal website.
 
-Add portrait at:
+You will know what my research are when you enter it :)
+
+
 assets/profile.jpg
